@@ -1,0 +1,5 @@
+C:\Users\YES24\Documents\visual studio 2015\Projects\BlogMaster\pro-.net-4-parallel-programming-in-csharp-master\SourceCode - Final\04 - Coordinating Tasks\Assuming_WaitAny_Status\bin\Debug\Assuming_WaitAny_Status.exe
+C:\Users\YES24\Documents\visual studio 2015\Projects\BlogMaster\pro-.net-4-parallel-programming-in-csharp-master\SourceCode - Final\04 - Coordinating Tasks\Assuming_WaitAny_Status\bin\Debug\Assuming_WaitAny_Status.pdb
+C:\Users\YES24\Documents\visual studio 2015\Projects\BlogMaster\pro-.net-4-parallel-programming-in-csharp-master\SourceCode - Final\04 - Coordinating Tasks\Assuming_WaitAny_Status\obj\x86\Debug\Assuming_WaitAny_Status.csprojResolveAssemblyReference.cache
+C:\Users\YES24\Documents\visual studio 2015\Projects\BlogMaster\pro-.net-4-parallel-programming-in-csharp-master\SourceCode - Final\04 - Coordinating Tasks\Assuming_WaitAny_Status\obj\x86\Debug\Assuming_WaitAny_Status.exe
+C:\Users\YES24\Documents\visual studio 2015\Projects\BlogMaster\pro-.net-4-parallel-programming-in-csharp-master\SourceCode - Final\04 - Coordinating Tasks\Assuming_WaitAny_Status\obj\x86\Debug\Assuming_WaitAny_Status.pdb

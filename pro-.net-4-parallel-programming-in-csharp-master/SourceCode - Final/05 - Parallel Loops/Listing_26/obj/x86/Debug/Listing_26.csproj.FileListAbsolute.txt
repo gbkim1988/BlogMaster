@@ -1,0 +1,3 @@
+C:\Users\YES24\Documents\visual studio 2015\Projects\BlogMaster\pro-.net-4-parallel-programming-in-csharp-master\SourceCode - Final\05 - Parallel Loops\Listing_26\bin\Debug\Listing_16.exe
+C:\Users\YES24\Documents\visual studio 2015\Projects\BlogMaster\pro-.net-4-parallel-programming-in-csharp-master\SourceCode - Final\05 - Parallel Loops\Listing_26\obj\x86\Debug\Listing_16.exe
+C:\Users\YES24\Documents\visual studio 2015\Projects\BlogMaster\pro-.net-4-parallel-programming-in-csharp-master\SourceCode - Final\05 - Parallel Loops\Listing_26\obj\x86\Debug\Listing_16.pdb
