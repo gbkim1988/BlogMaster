@@ -23,6 +23,7 @@ namespace BlogMaster
         public MainWindow()
         {
             InitializeComponent();
+            //NaverLogin
         }
     }
 }

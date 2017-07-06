@@ -5,9 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BlogMaster"
         xmlns:view="clr-namespace:BlogMaster.V"
+        DataContext="{Binding MainViewModel, Source={StaticResource Locator}}"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
+    <DockPanel>
+        <!--
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="12"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        -->
+        <StackPanel DockPanel.Dock="Bottom">
+            <StatusBar>
+                <StatusBarItem>
+                    <TextBlock Name="lblStatusView" Text="{Binding lblStatusView, Mode=TwoWay}"/>
+                </StatusBarItem>
+            </StatusBar>
+        </StackPanel>
         <TabControl>
             <TabItem Header="KMaster">
                 <view:KeywordMaster x:Name="KMaster"/>
@@ -16,5 +31,5 @@
                 <view:CollectMaster x:Name="CMaster"/>
             </TabItem>
         </TabControl>
-    </Grid>
+    </DockPanel>
 </Window>

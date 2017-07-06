@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Ioc;
+﻿using BlogMaster.M;
+using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Practices.ServiceLocation;
 using System;
@@ -15,7 +16,8 @@ namespace BlogMaster.VM
         public ViewModelLocator() {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<KeywordMasterViewModel>();
+            SimpleIoc.Default.Register<ISqlLiteManager, SqlLiteManager>();
+            SimpleIoc.Default.Register(() => new KeywordMasterViewModel(new SqlLiteManager("blogmaster.sqlite")));
             Messenger.Default.Register<NotificationMessage>(this, NotifyUserMethod);
         }
         public MainViewModel MainViewModel

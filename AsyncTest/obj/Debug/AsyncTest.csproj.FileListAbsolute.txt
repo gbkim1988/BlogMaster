@@ -1,0 +1,7 @@
+C:\Users\YES24\documents\visual studio 2015\Projects\BlogMaster\AsyncTest\bin\Debug\AsyncTest.exe.config
+C:\Users\YES24\documents\visual studio 2015\Projects\BlogMaster\AsyncTest\bin\Debug\AsyncTest.exe
+C:\Users\YES24\documents\visual studio 2015\Projects\BlogMaster\AsyncTest\bin\Debug\AsyncTest.pdb
+C:\Users\YES24\documents\visual studio 2015\Projects\BlogMaster\AsyncTest\bin\Debug\Newtonsoft.Json.dll
+C:\Users\YES24\documents\visual studio 2015\Projects\BlogMaster\AsyncTest\bin\Debug\Newtonsoft.Json.xml
+C:\Users\YES24\documents\visual studio 2015\Projects\BlogMaster\AsyncTest\obj\Debug\AsyncTest.exe
+C:\Users\YES24\documents\visual studio 2015\Projects\BlogMaster\AsyncTest\obj\Debug\AsyncTest.pdb

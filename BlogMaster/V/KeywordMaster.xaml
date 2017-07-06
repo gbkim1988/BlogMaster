@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BlogMaster.V"
              xmlns:vm="clr-namespace:BlogMaster.VM"
+             xmlns:util="clr-namespace:BlogMaster.U"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" 
              DataContext="{Binding KeywordMasterViewModel, Source={StaticResource Locator}}"
@@ -23,7 +24,7 @@
                 <RowDefinition Height="6*"/>
             </Grid.RowDefinitions>
             <StackPanel>
-                <Label Content="Keyword : " Margin="3">
+                <Label x:Name="KeywordLabel" Content="Keyword : " Margin="3">
                     <Label.Style>
                         <Style TargetType="Label">
                             <Setter Property="FontWeight" Value="Bold"/>
@@ -31,22 +32,25 @@
                         </Style>
                     </Label.Style>
                 </Label>
-                <TextBox Name="SearchKeyword" Margin="3"></TextBox>
-                <Button Name="Add" Content="추가" Margin="3"></Button>
+                <TextBox Name="SearchKeyword" Margin="3" Text="{Binding Keyword}"></TextBox>
+                <Button Name="Add" Content="추가" Margin="3" Command="{Binding AddKeyword}"></Button>
             </StackPanel>
             <DockPanel Grid.Row="1" >
-                <DataGrid x:Name="WorkerQueue" AutoGenerateColumns="False" Margin="3" >
+                <DataGrid x:Name="WorkerQueue" AutoGenerateColumns="False" ItemsSource="{Binding SlaveWorkerQueueView}" Margin="3" >
+                    <!--
+                    잠시 비활성 상태로 둠
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
                             <i:InvokeCommandAction Command="{Binding Open}" CommandParameter="{Binding ElementName=NaverSearchResult, Path=SelectedItem}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
+                    -->
                     <DataGrid.Columns>
                         <!-- Worker Instance Name -->
                         <DataGridTemplateColumn Header="워커 이름">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label>
+                                    <Label Content="{Binding WorkerName}">
                                         <Label.Style>
                                             <Style TargetType="Label">
                                                 <Setter Property="FontStyle" Value="Italic"></Setter>
@@ -61,7 +65,7 @@
                         <DataGridTemplateColumn Header="키워드">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label>
+                                    <Label Content="{Binding Keyword}">
                                         <Label.Style>
                                             <Style TargetType="Label">
                                                 <Setter Property="FontStyle" Value="Normal"></Setter>
@@ -77,7 +81,7 @@
                         <DataGridTemplateColumn Header="워커 상태">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label>
+                                    <Label Content="{Binding Stat}">
                                         <Label.Style>
                                             <Style TargetType="Label">
                                                 <Setter Property="FontStyle" Value="Normal"></Setter>
@@ -103,7 +107,7 @@
                         <DataGridTemplateColumn Header="추천 키워드 수">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label>
+                                    <Label Content="{Binding StemFrom}">
                                         <Label.Style>
                                             <Style TargetType="Label">
                                                 <Setter Property="FontStyle" Value="Normal"></Setter>
@@ -285,6 +289,55 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+
+                        <!-- 블로그 개수 -->
+                        <DataGridTemplateColumn Header="블로그 문서수">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label>
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="FontStyle" Value="Italic"></Setter>
+                                                <Setter Property="FontFamily" Value="sanserif"></Setter>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
+                        <!-- N사제외블로그수 -->
+                        <DataGridTemplateColumn Header="N사 제외 블로그 수">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label>
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="FontStyle" Value="Italic"></Setter>
+                                                <Setter Property="FontFamily" Value="sanserif"></Setter>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- 연관 키워드 개수 -->
+                        <DataGridTemplateColumn Header="연관 키워드 개수">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label>
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="FontStyle" Value="Italic"></Setter>
+                                                <Setter Property="FontFamily" Value="sanserif"></Setter>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
