@@ -87,7 +87,7 @@ namespace BlogMaster.V {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/BlogMaster;component/v/keywordmaster.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/MasterBY;component/v/keywordmaster.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\V\KeywordMaster.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

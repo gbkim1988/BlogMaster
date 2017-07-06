@@ -17,7 +17,7 @@ namespace BlogMaster.VM
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<ISqlLiteManager, SqlLiteManager>();
-            SimpleIoc.Default.Register(() => new KeywordMasterViewModel(new SqlLiteManager("blogmaster.sqlite")));
+            SimpleIoc.Default.Register(() => new KeywordMasterViewModel(new SqlLiteManager("masterby.sqlite")));
             Messenger.Default.Register<NotificationMessage>(this, NotifyUserMethod);
         }
         public MainViewModel MainViewModel

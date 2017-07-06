@@ -52,7 +52,7 @@ namespace BlogMaster.V {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/BlogMaster;component/v/collectmaster.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/MasterBY;component/v/collectmaster.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\V\CollectMaster.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

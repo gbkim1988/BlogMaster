@@ -24,12 +24,12 @@ namespace BlogMaster.M
         public String mWorkerName;
         public int mStemFrom;
         public ISqlLiteManager mLiteManager;
-        public LowestSlave(String keyword, ISqlLiteManager db) {
+        public LowestSlave(String keyword, ISqlLiteManager db, String Worker="Worker") {
             Stat = Status.Pending;
             this.mElapsed = new Stopwatch();
             Keyword = keyword;
             this.mLiteManager = db;
-            WorkerName = SyncHelperUtil.RandomNameGenerator("Worker");
+            WorkerName = SyncHelperUtil.RandomNameGenerator(Worker);
         }
         public int StemFrom {
             get {
