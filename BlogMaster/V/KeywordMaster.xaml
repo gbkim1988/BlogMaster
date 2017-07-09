@@ -62,7 +62,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <!-- Keyword String -->
-                        <DataGridTemplateColumn Header="키워드">
+                        <DataGridTemplateColumn Header="키워드" MaxWidth="210" MinWidth="210">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Label Content="{Binding Keyword}">
@@ -114,14 +114,16 @@
                                                 <Setter Property="FontStyle" Value="Normal"></Setter>
                                                 <Setter Property="FontFamily" Value="sanserif"></Setter>
                                                 <Style.Triggers>
-                                                    <!-- If Worker Instance meet to errors -->
+                                                    <!-- If Worker Instance meet to errors
                                                     <DataTrigger Binding="{Binding Something}" Value="Somestring">
                                                         <Setter Property="Background" Value="Red"></Setter>
+                                                    
                                                     </DataTrigger>
-                                                    <!-- If Worker Instance succeeed -->
+                                                    
                                                     <DataTrigger Binding="{Binding Something}" Value="Somestring2">
                                                         <Setter Property="Background" Value="Green"></Setter>
                                                     </DataTrigger>
+                                                    If Worker Instance succeeed -->
                                                 </Style.Triggers>
                                             </Style>
                                         </Label.Style>
@@ -216,8 +218,8 @@
             </Grid>
             <GridSplitter Grid.Row="1" Height="4" HorizontalAlignment="Stretch"/>
             <!-- <Grid Grid.Row="2"> -->
-            <StackPanel Grid.Row="2">
-                <Label Content="검색 현황">
+            <DockPanel Grid.Row="2">
+                <Label Content="검색 현황" DockPanel.Dock="Top">
                     <Label.Style>
                         <Style TargetType="Label">
                             <Setter Property="FontStyle" Value="Italic"/>
@@ -225,13 +227,13 @@
                     </Label.Style>
                 </Label>
                 <!-- 키워드 수집 결과 -->
-                <DataGrid AutoGenerateColumns="False" Margin="3">
+                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding KeywordMasterRecordView}" Margin="3">
                     <DataGrid.Columns>
                     <!-- 키워드 Name -->
                         <DataGridTemplateColumn Header="키워드">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label>
+                                    <Label Content="{Binding keyword}">
                                         <Label.Style>
                                             <Style TargetType="Label">
                                                 <Setter Property="FontStyle" Value="Italic"></Setter>
@@ -246,7 +248,7 @@
                         <DataGridTemplateColumn Header="월간(PC)">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label>
+                                    <Label Content="{Binding monthlyPcCnt}">
                                         <Label.Style>
                                             <Style TargetType="Label">
                                                 <Setter Property="FontStyle" Value="Italic"></Setter>
@@ -262,7 +264,7 @@
                         <DataGridTemplateColumn Header="월간(모바일)">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label>
+                                    <Label Content="{Binding monthlyMobCnt}">
                                         <Label.Style>
                                             <Style TargetType="Label">
                                                 <Setter Property="FontStyle" Value="Italic"></Setter>
@@ -278,7 +280,7 @@
                         <DataGridTemplateColumn Header="경쟁력">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label>
+                                    <Label Content="{Binding CompIndex}">
                                         <Label.Style>
                                             <Style TargetType="Label">
                                                 <Setter Property="FontStyle" Value="Italic"></Setter>
@@ -340,7 +342,7 @@
 
                     </DataGrid.Columns>
                 </DataGrid>
-            </StackPanel>
+            </DockPanel>
             <!-- </Grid> -->
         </Grid>
     </Grid>

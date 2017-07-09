@@ -14,5 +14,8 @@ namespace BlogMaster.M
         void AddCollectedKeyword(String keyword, int Count, int Processed);
         void AddPendingKeyword(String keyword, int Processed);
         IList<String> RetrievePendingList();
+        IList<String> RetrieveKewordList();
+        void AddStatisticsKeyword(String keyword, int monthlyPcCnt, int monthlyMobCnt, String comp);
+        IList<NaverStatistics> RetrieveStatisticsList();
     }
 }

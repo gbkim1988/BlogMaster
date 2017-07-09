@@ -36,10 +36,25 @@ namespace BlogMaster.Async
                 _synchronizationContext.Send(_ => action(), null);
             }
         }
-
+        public void RemoveAsync(T item)
+        {
+            ExecuteOnSyncContext(() => base.Remove(item));
+        }
         protected override void InsertItem(int index, T item)
         {
-            ExecuteOnSyncContext(() => base.InsertItem(index, item));
+            try
+            {
+                
+                    ExecuteOnSyncContext(() => { if (index == base.Count) { base.InsertItem(index, item); } } );
+                //else if (index == 0)
+                //{
+                //  ExecuteOnSyncContext(() => base.InsertItem(index, item));
+                //}
+            }
+            catch (Exception e) {
+
+            }
+            
         }
 
         protected override void RemoveItem(int index)

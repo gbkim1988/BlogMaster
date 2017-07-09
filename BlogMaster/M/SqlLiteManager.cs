@@ -38,10 +38,15 @@ namespace BlogMaster.M
 	        `keyword`	TEXT UNIQUE,
 	        `monthlyPcCnt`	INTEGER,
 	        `monthlyMobCnt`	NUMERIC,
+            `competive`	TEXT,
 	        `blogCount`	INTEGER,
 	        `noNaverBlogCount`	INTEGER,
 	        `associateKeywordCount`	INTEGER
         )
+        ";
+        private static String INSERT_STATISTICS_QUERY = @"
+        INSERT INTO `STATISTICS` (`keyword`, `monthlyPcCnt`, `monthlyMobCnt`, `competive`) 
+        values ('{0}', {1}, {2}, '{3}')
         ";
 
         private static String INSERT_KEYWORD_QUERY = @"
@@ -58,12 +63,37 @@ namespace BlogMaster.M
         SELECT keyword FROM PENDING where Processed=0 LIMIT 10;
         ";
 
+        private static String SELECT_KEYWORD = @"
+        SELECT keyword FROM KEYWORDS where Processed=0 LIMIT 10;
+        ";
+        /*
+         	        `no`	INTEGER PRIMARY KEY AUTOINCREMENT,
+	        `keyword`	TEXT UNIQUE,
+	        `monthlyPcCnt`	INTEGER,
+	        `monthlyMobCnt`	NUMERIC,
+            `competive`	TEXT,
+	        `blogCount`	INTEGER,
+	        `noNaverBlogCount`	INTEGER,
+	        `associateKeywordCount`	INTEGER
+             
+             */
+        private static String SELECT_STATISTICS = @"
+        SELECT no, keyword, monthlyPcCnt, monthlyMobCnt, competive, blogCount, noNaverBlogCount, associateKeywordCount  
+        FROM STATISTICS WHERE monthlyPcCnt > 0 and monthlyMobCnt > 0 ORDER By monthlyPcCnt, monthlyMobCnt ASC;
+        ";
+
         private static String DELETE_PENDING = @"
         DELETE FROM PENDING WHERE keyword='{0}'
         ";
 
         private static String UPDATE_PENDING = @"
         UPDATE PENDING
+            SET Processed=1
+        WHERE keyword='{0}';
+        ";
+
+        private static String UPDATE_KEYWORD = @"
+        UPDATE KEYWORDS
             SET Processed=1
         WHERE keyword='{0}';
         ";
@@ -119,6 +149,34 @@ namespace BlogMaster.M
             RunInsertSQL(InsertQuery);
         }
 
+        public void AddStatisticsKeyword(String keyword, int monthlyPcCnt, int monthlyMobCnt, String comp) {
+            String InsertQuery = String.Format(SqlLiteManager.INSERT_STATISTICS_QUERY, keyword, monthlyPcCnt, monthlyMobCnt, comp);
+            try
+            {
+                RunInsertSQL(InsertQuery);
+                
+            }
+            catch (Exception e) {
+
+            }finally{
+                
+            }
+            
+        }
+        public IList<String> RetrieveKewordList()
+        {
+            IList<String> keyList = new List<String>();
+
+            SQLiteDataReader reader = RunSelectSQL(SqlLiteManager.SELECT_KEYWORD);
+            while (reader.Read())
+            {
+                keyList.Add((String)reader["keyword"]);
+                UpdateSQL(String.Format(SqlLiteManager.UPDATE_KEYWORD, (String)reader["keyword"]));
+            }
+
+            return keyList;
+        }
+
         public IList<String> RetrievePendingList() {
             IList<String> keyList = new List<String>();
 
@@ -129,6 +187,39 @@ namespace BlogMaster.M
             }
 
             return keyList;
+        }
+
+        public IList<NaverStatistics> RetrieveStatisticsList()
+        {
+            IList<NaverStatistics> statsList = new List<NaverStatistics>();
+            SQLiteDataReader reader = RunSelectSQL(SqlLiteManager.SELECT_STATISTICS);
+            while (reader.Read())
+            {
+                int no = reader.GetInt32(0);
+                String keyword = reader.GetString(1);// (String)reader["keyword"];
+                int monthlyPcCnt = reader.GetInt32(2); //(int)reader["monthlyPcCnt"];
+                int monthlyMobCnt = reader.GetInt32(3); //(int)reader["monthlyMobCnt"];
+                String CompIndex = reader.GetString(4); //(String)reader["competive"];
+                int blogCount;
+                int noNaverBlogCount;
+                int associateKeywordCount;
+                try { blogCount = reader.GetInt32(5); }catch (Exception e) { blogCount = -1; }
+                try { noNaverBlogCount = reader.GetInt32(6); } catch (Exception e) { noNaverBlogCount = -1;  }
+                try { associateKeywordCount = reader.GetInt32(7); } catch (Exception e) { associateKeywordCount = -1; }
+
+                statsList.Add(new NaverStatistics {
+                    no = no,
+                    keyword = keyword,
+                    monthlyPcCnt = monthlyPcCnt,
+                    monthlyMobCnt = monthlyMobCnt,
+                    CompIndex = CompIndex,
+                    blogCount = blogCount,
+                    noNaverBlogCount = noNaverBlogCount,
+                    associateKeywordCount = associateKeywordCount
+                });
+            }
+
+            return statsList;
         }
         /// <summary>
         /// Below Code From https://stackoverflow.com/questions/20001129/multithreading-in-c-sharp-sqlite

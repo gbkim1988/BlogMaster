@@ -126,9 +126,13 @@
     <Compile Include="A\IAsyncCommand.cs" />
     <Compile Include="A\NotifyTaskCompletion.cs" />
     <Compile Include="C\StatusBarMessage.cs" />
+    <Compile Include="M\CollectSlave.cs" />
+    <Compile Include="M\ISlave.cs" />
     <Compile Include="M\ISqlLiteManager.cs" />
+    <Compile Include="M\KeywordListResponse.cs" />
     <Compile Include="M\LowestSlave.cs" />
     <Compile Include="M\MiddleManager.cs" />
+    <Compile Include="M\NaverStatistics.cs" />
     <Compile Include="M\SqlLiteManager.cs" />
     <Compile Include="Notifier.cs" />
     <Compile Include="U\AsyncHelperUtil.cs" />

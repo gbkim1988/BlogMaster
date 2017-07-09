@@ -13,13 +13,15 @@ namespace BlogMaster.U
         private readonly string BaseUrl;
         private readonly string ApiKey;
         private readonly string SecretKey;
+        private readonly string ClientID;
         private readonly HMACSHA256 HMAC;
 
-        public NaverAdAPI(string baseUrl, string apiKey, string secretKey)
+        public NaverAdAPI(string baseUrl, string apiKey, string secretKey, string cleintID)
         {
             this.BaseUrl = baseUrl;
             this.ApiKey = apiKey;
             this.SecretKey = secretKey;
+            this.ClientID = cleintID;
             this.HMAC = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey));
         }
 
@@ -35,11 +37,11 @@ namespace BlogMaster.U
             request.AddHeader("X-Timestamp", timestamp);
             request.AddHeader("X-Signature", signature);
 
-            printRequest(request);
+            //printRequest(request);
 
             var response = client.Execute<T>(request);
 
-            printResponse(response);
+            //printResponse(response);
 
             if (response.ErrorException != null)
             {
@@ -60,7 +62,7 @@ namespace BlogMaster.U
 
         private static readonly Func<Parameter, bool> IS_HEADER = param => param.Type == ParameterType.HttpHeader;
         private static readonly Func<Parameter, bool> IS_QUERYPARAM = param => param.Type == ParameterType.QueryString;
-
+        
         private void printRequest(RestRequest request)
         {
             Console.WriteLine("============ Request =============");

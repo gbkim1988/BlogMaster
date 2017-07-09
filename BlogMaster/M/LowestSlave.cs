@@ -1,4 +1,6 @@
 ﻿using BlogMaster.U;
+using BlogMaster.VM;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -79,16 +81,54 @@ namespace BlogMaster.M
                 RaisePropertyChanged("WorkerName");
             }
         }
-        public async Task<bool> StatisticsWork() {
+        public async Task<bool> Collect()
+        {
+            /*
+                테스트의 목적은 Pending 상태에서, 
+                프로세스 상태, 그리고 Finish 상태로 페이즈 전환이 
+                정확히 View 에 반영되는가에 달려있다. 
+             */
+
             Stat = Status.Processing;
             //await U.AsyncHelperUtil.Delay(5000);
-            // var result = FetchingNaverHelper.NaverFavoriteKeyword(this.mKeyword);
-            // 네이버 API 
-            //StemFrom = result.Length;
+            NaverAdAPI naverApi = new NaverAdAPI(KeywordMasterViewModel.NaverApiURL, 
+                    KeywordMasterViewModel.ACCESS,
+                    KeywordMasterViewModel.Secret,
+                    KeywordMasterViewModel.CsID
+                );
+            var request = new RestRequest("/keywordstool", Method.GET);
+            request.AddQueryParameter("hintKeywords", this.mKeyword);
+
             try
             {
                 try
                 {
+                    List<KeywordListResponse> Statistics = naverApi.Execute<List<KeywordListResponse>>(request, long.Parse(KeywordMasterViewModel.CsID));
+                    
+                    foreach (var item in Statistics)
+                    {
+                        foreach (var props in item.KeywordList)
+                        {
+                            //Console.WriteLine(props.monthlyPcQcCnt);
+                            //Console.WriteLine(props.monthlyMobileQcCnt);
+                            //Console.WriteLine(props.relKeyword);
+                            //Console.WriteLine(props.compIdx);
+                            int monthlyPcQcCnt;
+                            int monthlyMobileQcCnt;
+                            String relKeyword;
+                            String compIdx;
+                            //this.mLiteManager.
+                            // 10 개 미만의 경우 경쟁력이 떨어짐
+                            try { monthlyPcQcCnt = int.Parse(props.monthlyPcQcCnt);}catch(Exception e){ monthlyPcQcCnt = -2;}
+                            try { monthlyMobileQcCnt = int.Parse(props.monthlyMobileQcCnt); } catch (Exception e) { monthlyMobileQcCnt = -2; }
+                            relKeyword = props.relKeyword;
+                            compIdx = props.compIdx;
+
+                            StemFrom = monthlyPcQcCnt;
+                            this.mLiteManager.AddStatisticsKeyword(relKeyword, monthlyPcQcCnt, monthlyMobileQcCnt, compIdx);
+
+                        }
+                    }
                     //this.mLiteManager.AddCollectedKeyword(this.Keyword, this.mStemFrom, 0);
                 }
                 catch (Exception e)
@@ -107,8 +147,7 @@ namespace BlogMaster.M
                         Console.WriteLine(e.Message);
                     }
 
-                }
-                */
+                }*/
             }
             catch (Exception e)
             {
@@ -121,6 +160,7 @@ namespace BlogMaster.M
             }
             return true;
         }
+
         public async Task<bool> Work() {
             /*
                 테스트의 목적은 Pending 상태에서, 
