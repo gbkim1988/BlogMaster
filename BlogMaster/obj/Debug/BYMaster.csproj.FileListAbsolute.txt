@@ -101,3 +101,6 @@ C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\BlogMaster\obj\D
 C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\BlogMaster\obj\Debug\BYMaster.csproj.GenerateResource.Cache
 C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\BlogMaster\obj\Debug\MasterBY.exe
 C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\BlogMaster\obj\Debug\MasterBY.pdb
+C:\Users\YES24\Documents\Visual Studio 2015\Projects\BlogMaster\BlogMaster\bin\Debug\HtmlAgilityPack.dll
+C:\Users\YES24\Documents\Visual Studio 2015\Projects\BlogMaster\BlogMaster\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\YES24\Documents\Visual Studio 2015\Projects\BlogMaster\BlogMaster\bin\Debug\HtmlAgilityPack.xml

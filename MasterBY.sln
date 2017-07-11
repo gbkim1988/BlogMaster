@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BYMaster", "BlogMaster\BYMa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncTest", "AsyncTest\AsyncTest.csproj", "{9DC8C2EB-35FC-42AE-8BA4-AECAD6C79835}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaverParsingTest", "NaverParsingTest\NaverParsingTest.csproj", "{3FB5DFB8-C1F7-4BF8-9F34-CB1822DB1025}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9DC8C2EB-35FC-42AE-8BA4-AECAD6C79835}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DC8C2EB-35FC-42AE-8BA4-AECAD6C79835}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DC8C2EB-35FC-42AE-8BA4-AECAD6C79835}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FB5DFB8-C1F7-4BF8-9F34-CB1822DB1025}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FB5DFB8-C1F7-4BF8-9F34-CB1822DB1025}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FB5DFB8-C1F7-4BF8-9F34-CB1822DB1025}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FB5DFB8-C1F7-4BF8-9F34-CB1822DB1025}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

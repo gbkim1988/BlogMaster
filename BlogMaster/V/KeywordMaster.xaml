@@ -195,16 +195,16 @@
                     </CheckBox>
                 </StackPanel>
                 <StackPanel Grid.Column="2">
-                    <Label Content="필터 옵션">
+                    <Label Content="커맨드">
                         <Label.Style>
                             <Style TargetType="Label">
                                 <Setter Property="FontStyle" Value="Italic"/>
                             </Style>
                         </Label.Style>
                     </Label>
-                    <CheckBox>
-                        <Label Content="Option1"></Label>
-                    </CheckBox>
+                    <Button Content="검색"></Button>
+                    <Button Content="출력"></Button>
+                    <Button Content="출력"></Button>
                     <CheckBox>
                         <Label Content="Option2"></Label>
                     </CheckBox>
@@ -219,18 +219,27 @@
             <GridSplitter Grid.Row="1" Height="4" HorizontalAlignment="Stretch"/>
             <!-- <Grid Grid.Row="2"> -->
             <DockPanel Grid.Row="2">
-                <Label Content="검색 현황" DockPanel.Dock="Top">
-                    <Label.Style>
-                        <Style TargetType="Label">
-                            <Setter Property="FontStyle" Value="Italic"/>
-                        </Style>
-                    </Label.Style>
-                </Label>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                    <Label Content="검색 현황" DockPanel.Dock="Top">
+                        <Label.Style>
+                            <Style TargetType="Label">
+                                <Setter Property="FontStyle" Value="Italic"/>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <Label Content="{Binding KeywordRecordCount}" DockPanel.Dock="Top">
+                        <Label.Style>
+                            <Style TargetType="Label">
+                                <Setter Property="FontStyle" Value="Italic"/>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                </StackPanel>
                 <!-- 키워드 수집 결과 -->
                 <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding KeywordMasterRecordView}" Margin="3">
                     <DataGrid.Columns>
                     <!-- 키워드 Name -->
-                        <DataGridTemplateColumn Header="키워드">
+                        <DataGridTemplateColumn Header="키워드"  SortMemberPath="keyword"  CanUserSort="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Label Content="{Binding keyword}">
@@ -245,7 +254,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <!-- 월간 검색수(PC) String -->
-                        <DataGridTemplateColumn Header="월간(PC)">
+                        <DataGridTemplateColumn Header="월간(PC)" SortMemberPath="monthlyPcCnt"  CanUserSort="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Label Content="{Binding monthlyPcCnt}">
@@ -261,7 +270,7 @@
                         </DataGridTemplateColumn>
 
                         <!-- 월간 검색수(모바일) String -->
-                        <DataGridTemplateColumn Header="월간(모바일)">
+                        <DataGridTemplateColumn Header="월간(모바일)" SortMemberPath="monthlyMobCnt" CanUserSort="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Label Content="{Binding monthlyMobCnt}">
@@ -277,7 +286,7 @@
                         </DataGridTemplateColumn>
 
                         <!-- 경쟁 정도 String -->
-                        <DataGridTemplateColumn Header="경쟁력">
+                        <DataGridTemplateColumn Header="경쟁력" SortMemberPath="CompIndex" CanUserSort="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Label Content="{Binding CompIndex}">
