@@ -34,6 +34,8 @@
                 </Label>
                 <TextBox Name="SearchKeyword" Margin="3" Text="{Binding Keyword}"></TextBox>
                 <Button Name="Add" Content="추가" Margin="3" Command="{Binding AddKeyword}"></Button>
+                <Button Name="Kill" Content="킬 스위치" Margin="3" Command="{Binding KillSwitch}"></Button>
+                <Button Name="Restarter" Content="재 시작" Margin="3" Command="{Binding Restarter}"></Button>
             </StackPanel>
             <DockPanel Grid.Row="1" >
                 <DataGrid x:Name="WorkerQueue" AutoGenerateColumns="False" ItemsSource="{Binding SlaveWorkerQueueView}" Margin="3" >
@@ -142,7 +144,7 @@
         <Grid Grid.Column="2" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <!-- 우측 패널의 위 아래 행의 비율을 2:3 으로 지정 -->
-                <RowDefinition Height="1*" MinHeight="40"/>
+                <RowDefinition Height="2*" MinHeight="40"/>
                 <RowDefinition Height="4"/>
                 <RowDefinition Height="4*"/>
             </Grid.RowDefinitions>
@@ -153,46 +155,88 @@
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <Label Content="필터 옵션">
+                    <Label Content="검색 필터">
                         <Label.Style>
                             <Style TargetType="Label">
                                 <Setter Property="FontStyle" Value="Italic"/>
                             </Style>
                         </Label.Style>
                     </Label>
-                    <CheckBox>
-                        <Label Content="Option1"></Label>
-                    </CheckBox>
-                    <CheckBox>
-                        <Label Content="Option2"></Label>
-                    </CheckBox>
-                    <CheckBox>
-                        <Label Content="Option3"></Label>
-                    </CheckBox>
-                    <CheckBox>
-                        <Label Content="Option4"></Label>
-                    </CheckBox>
+                    <StackPanel>
+                        <Label Content="검색 키워드 입력"></Label>
+                        <TextBox Name="FindKeyword"></TextBox>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label Content="모바일 조회 수 (이상)"></Label>
+                        <TextBox Name="MobileCount"></TextBox>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label Content="PC 조회 수 (이상)"></Label>
+                        <TextBox Name="PcCount"></TextBox>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label Content="블로그 갯수 (이상)"></Label>
+                        <TextBox Name="BlogTotal"></TextBox>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label Content="N사 제외 블로그 갯수 (이상)"></Label>
+                        <TextBox Name="NonNaverBlogCount"></TextBox>
+                    </StackPanel>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
-                    <Label Content="필터 옵션">
+                    <Label Content="Naver AD API 키 등록">
                         <Label.Style>
                             <Style TargetType="Label">
                                 <Setter Property="FontStyle" Value="Italic"/>
                             </Style>
                         </Label.Style>
                     </Label>
-                    <CheckBox>
-                        <Label Content="Option1"></Label>
-                    </CheckBox>
-                    <CheckBox>
-                        <Label Content="Option2"></Label>
-                    </CheckBox>
-                    <CheckBox>
-                        <Label Content="Option3"></Label>
-                    </CheckBox>
-                    <CheckBox>
-                        <Label Content="Option4"></Label>
-                    </CheckBox>
+                    <StackPanel>
+                        <Label Content="CUSTOMER_ID"></Label>
+                        <TextBox Name="A"></TextBox>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label Content="엑세스라이선스"></Label>
+                        <TextBox Name="B"></TextBox>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label Content="비밀키"></Label>
+                        <TextBox Name="C"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="추가"></Button>
+                        <Button Content="제거"></Button>
+                    </StackPanel>
+                    <!-- 리스트 박스를 활용해 보자 -->
+                    <ListBox Margin="3"  HorizontalContentAlignment="Stretch" SelectionMode="Extended" Height="50">
+                        <ListBox.Template>
+                            <ControlTemplate>
+                                <DockPanel LastChildFill="True">
+                                    <Grid DockPanel.Dock="Top" Height="30">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Background="White" BorderBrush="Black" BorderThickness="1" HorizontalContentAlignment="Center">Customer ID</Label>
+                                        <Label Grid.Column="1" Background="White" BorderBrush="Black" BorderThickness="1" HorizontalContentAlignment="Center">사용 중</Label>
+                                    </Grid>
+                                    <ItemsPresenter></ItemsPresenter>
+                                </DockPanel>
+                            </ControlTemplate>
+                        </ListBox.Template>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="{Binding Something}"/>
+                                    <Label Content="{Binding Something2}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </StackPanel>
                 <StackPanel Grid.Column="2">
                     <Label Content="커맨드">
@@ -202,18 +246,9 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <Button Content="검색"></Button>
-                    <Button Content="출력"></Button>
-                    <Button Content="출력"></Button>
-                    <CheckBox>
-                        <Label Content="Option2"></Label>
-                    </CheckBox>
-                    <CheckBox>
-                        <Label Content="Option3"></Label>
-                    </CheckBox>
-                    <CheckBox>
-                        <Label Content="Option4"></Label>
-                    </CheckBox>
+                    <Button Content="검색" Margin="4"></Button>
+                    <Button Content="출력" Margin="4" Command="{Binding CreateCSV}"></Button>
+                    <Button Content="DB 초기화" Margin="4"></Button>
                 </StackPanel>
             </Grid>
             <GridSplitter Grid.Row="1" Height="4" HorizontalAlignment="Stretch"/>
@@ -302,10 +337,10 @@
                         </DataGridTemplateColumn>
 
                         <!-- 블로그 개수 -->
-                        <DataGridTemplateColumn Header="블로그 문서수">
+                        <DataGridTemplateColumn Header="블로그 문서수" SortMemberPath="blogCount" CanUserSort="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label>
+                                    <Label  Content="{Binding blogCount}">
                                         <Label.Style>
                                             <Style TargetType="Label">
                                                 <Setter Property="FontStyle" Value="Italic"></Setter>
@@ -318,10 +353,10 @@
                         </DataGridTemplateColumn>
                         
                         <!-- N사제외블로그수 -->
-                        <DataGridTemplateColumn Header="N사 제외 블로그 수">
+                        <DataGridTemplateColumn Header="N사 제외 블로그 수" SortMemberPath="noNaverBlogCount" CanUserSort="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label>
+                                    <Label Content="{Binding noNaverBlogCount}">
                                         <Label.Style>
                                             <Style TargetType="Label">
                                                 <Setter Property="FontStyle" Value="Italic"></Setter>
@@ -334,10 +369,10 @@
                         </DataGridTemplateColumn>
 
                         <!-- 연관 키워드 개수 -->
-                        <DataGridTemplateColumn Header="연관 키워드 개수">
+                        <DataGridTemplateColumn Header="연관 키워드 개수" SortMemberPath="associateKeywordCount" CanUserSort="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label>
+                                    <Label Content="{Binding associateKeywordCount}">
                                         <Label.Style>
                                             <Style TargetType="Label">
                                                 <Setter Property="FontStyle" Value="Italic"></Setter>

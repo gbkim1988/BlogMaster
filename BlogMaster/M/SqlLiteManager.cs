@@ -45,8 +45,8 @@ namespace BlogMaster.M
         )
         ";
         private static String INSERT_STATISTICS_QUERY = @"
-        INSERT INTO `STATISTICS` (`keyword`, `monthlyPcCnt`, `monthlyMobCnt`, `competive`) 
-        values ('{0}', {1}, {2}, '{3}')
+        INSERT INTO `STATISTICS` (`keyword`, `monthlyPcCnt`, `monthlyMobCnt`, `competive`, `blogCount`, `noNaverBlogCount`, `associateKeywordCount`) 
+        values ('{0}', {1}, {2}, '{3}', {4}, {5}, {6})
         ";
 
         private static String INSERT_KEYWORD_QUERY = @"
@@ -66,6 +66,10 @@ namespace BlogMaster.M
         private static String SELECT_KEYWORD = @"
         SELECT keyword FROM KEYWORDS where Processed=0 LIMIT 10;
         ";
+
+        private static String SELECT_PROCESSED_KEYWORD = @"
+        SELECT keyword FROM KEYWORDS where Processed=1;
+        ";
         /*
          	        `no`	INTEGER PRIMARY KEY AUTOINCREMENT,
 	        `keyword`	TEXT UNIQUE,
@@ -79,23 +83,23 @@ namespace BlogMaster.M
              */
         private static String SELECT_STATISTICS = @"
         SELECT no, keyword, monthlyPcCnt, monthlyMobCnt, competive, blogCount, noNaverBlogCount, associateKeywordCount  
-        FROM STATISTICS WHERE monthlyPcCnt > 0 and monthlyMobCnt > 0 ORDER By monthlyPcCnt, monthlyMobCnt ASC;
+        FROM STATISTICS WHERE monthlyPcCnt > 0 and monthlyMobCnt > 0 ORDER By monthlyPcCnt, monthlyMobCnt DESC;
         ";
 
         private static String DELETE_PENDING = @"
-        DELETE FROM PENDING WHERE keyword='{0}'
+        DELETE FROM PENDING WHERE keyword='{0} COLLATE NOCASE'
         ";
 
         private static String UPDATE_PENDING = @"
         UPDATE PENDING
             SET Processed=1
-        WHERE keyword='{0}';
+        WHERE keyword='{0}' COLLATE NOCASE;
         ";
 
         private static String UPDATE_KEYWORD = @"
         UPDATE KEYWORDS
             SET Processed=1
-        WHERE keyword='{0}';
+        WHERE keyword='{0}' COLLATE NOCASE;
         ";
         private String mSqliteName;
         private SQLiteConnection m_dbConnection;
@@ -138,36 +142,93 @@ namespace BlogMaster.M
 
         public void AddCollectedKeyword(String keyword, int Count, int Processed) {
             String InsertQuery = String.Format(SqlLiteManager.INSERT_KEYWORD_QUERY, keyword, Count, Processed);
-
-            RunInsertSQL(InsertQuery);
+            try
+            {
+                RunInsertSQL(InsertQuery);
+                //UpdateSQL(String.Format(SqlLiteManager.UPDATE_PENDING, keyword));
+            }
+            catch (Exception e) {
+                Console.WriteLine("AddCollectedKeyword : " + e.Message);
+            }
+            
         }
 
         public void AddPendingKeyword(String keyword, int Processed)
         {
             String InsertQuery = String.Format(SqlLiteManager.INSERT_PENDING_QUERY, keyword, Processed);
-
-            RunInsertSQL(InsertQuery);
-        }
-
-        public void AddStatisticsKeyword(String keyword, int monthlyPcCnt, int monthlyMobCnt, String comp) {
-            String InsertQuery = String.Format(SqlLiteManager.INSERT_STATISTICS_QUERY, keyword, monthlyPcCnt, monthlyMobCnt, comp);
             try
             {
                 RunInsertSQL(InsertQuery);
-                
             }
             catch (Exception e) {
+                Console.WriteLine("AddPendingKeyword : " + e.Message);
+            }
+            
+        }
+        //`blogCount`, `noNaverBlogCount`, `associateKeywordCount`
+        public void AddStatisticsKeyword(String keyword, int monthlyPcCnt, int monthlyMobCnt, String comp, int blogCount, int noNaverBlogCount, int associateKeywordCount) {
+            String InsertQuery = String.Format(SqlLiteManager.INSERT_STATISTICS_QUERY, keyword, monthlyPcCnt, monthlyMobCnt, comp, blogCount, noNaverBlogCount, associateKeywordCount);
+            try
+            {
+                RunInsertSQL(InsertQuery);
+                //UpdateSQL(String.Format(SqlLiteManager.UPDATE_KEYWORD, keyword));
 
-            }finally{
+            }
+            catch (System.Data.SQLite.SQLiteException e) {
+                //e.Con
+                //UpdateKeywordTable(new List<String> { keyword });
+                //Console.WriteLine("IMPORTANT : " + e.Message);
+            }
+            finally{
                 
             }
             
+        }
+
+        public void UpdateKeywordTable(IList<String> keywords) {
+            foreach (var keyword in keywords) {
+                try
+                {
+                    UpdateSQL(String.Format(SqlLiteManager.UPDATE_KEYWORD, keyword));
+                }
+                catch (Exception e) {
+                }
+            }
+        }
+
+        public void UpdatePendingTable(IList<String> keywords)
+        {
+            foreach (var keyword in keywords)
+            {
+                try
+                {
+                    UpdateSQL(String.Format(SqlLiteManager.UPDATE_PENDING, keyword));
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
         }
         public IList<String> RetrieveKewordList()
         {
             IList<String> keyList = new List<String>();
 
             SQLiteDataReader reader = RunSelectSQL(SqlLiteManager.SELECT_KEYWORD);
+            while (reader.Read())
+            {
+                keyList.Add((String)reader["keyword"]);
+                UpdateSQL(String.Format(SqlLiteManager.UPDATE_KEYWORD, (String)reader["keyword"]));
+            }
+
+            return keyList;
+        }
+
+        public IList<String> RetrieveProcessedKewordList()
+        {
+            IList<String> keyList = new List<String>();
+
+            SQLiteDataReader reader = RunSelectSQL(SqlLiteManager.SELECT_PROCESSED_KEYWORD);
             while (reader.Read())
             {
                 keyList.Add((String)reader["keyword"]);
@@ -229,6 +290,7 @@ namespace BlogMaster.M
         public SQLiteDataReader RunSelectSQL(string Sql)
         {
             SQLiteDataReader selectDataTable = null;
+            
             try
             {
                 _readerWriterLock.EnterReadLock();

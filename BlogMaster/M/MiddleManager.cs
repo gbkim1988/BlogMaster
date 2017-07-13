@@ -113,7 +113,33 @@ namespace BlogMaster.M
             catch (Exception e) { }
             
         }
+        public void SyncTable(object sender, ElapsedEventArgs e)
+        {
+            var StatisticsList = this.mDb.RetrieveStatisticsList();
+            List<String> Keywords = new List<String>();
+            if (StatisticsList.Count > 0)
+            {
+                foreach (var item in StatisticsList)
+                {
 
+                    Keywords.Add(item.keyword);
+                }
+            }
+            this.mDb.UpdateKeywordTable(Keywords);
+            Keywords.Clear();
+
+            var KeywordList = this.mDb.RetrieveProcessedKewordList();
+            if (StatisticsList.Count > 0)
+            {
+                foreach (var item in StatisticsList)
+                {
+
+                    Keywords.Add(item.keyword);
+                }
+            }
+            this.mDb.UpdatePendingTable(Keywords);
+
+        }
         public void UpdateCollectTable(object sender, ElapsedEventArgs e)
         {
 

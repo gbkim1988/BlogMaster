@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using static BlogMaster.U.FetchingNaverHelper;
 
 namespace BlogMaster.M
 {
@@ -101,31 +102,34 @@ namespace BlogMaster.M
 
             try
             {
+                List<KeywordListResponse> Statistics = naverApi.Execute<List<KeywordListResponse>>(request, long.Parse(KeywordMasterViewModel.CsID));
+                
                 try
                 {
-                    List<KeywordListResponse> Statistics = naverApi.Execute<List<KeywordListResponse>>(request, long.Parse(KeywordMasterViewModel.CsID));
-                    
                     foreach (var item in Statistics)
                     {
                         foreach (var props in item.KeywordList)
                         {
-                            //Console.WriteLine(props.monthlyPcQcCnt);
-                            //Console.WriteLine(props.monthlyMobileQcCnt);
-                            //Console.WriteLine(props.relKeyword);
-                            //Console.WriteLine(props.compIdx);
                             int monthlyPcQcCnt;
                             int monthlyMobileQcCnt;
                             String relKeyword;
                             String compIdx;
-                            //this.mLiteManager.
-                            // 10 개 미만의 경우 경쟁력이 떨어짐
                             try { monthlyPcQcCnt = int.Parse(props.monthlyPcQcCnt);}catch(Exception e){ monthlyPcQcCnt = -2;}
                             try { monthlyMobileQcCnt = int.Parse(props.monthlyMobileQcCnt); } catch (Exception e) { monthlyMobileQcCnt = -2; }
                             relKeyword = props.relKeyword;
                             compIdx = props.compIdx;
-
                             StemFrom = monthlyPcQcCnt;
-                            this.mLiteManager.AddStatisticsKeyword(relKeyword, monthlyPcQcCnt, monthlyMobileQcCnt, compIdx);
+                            NaverInfo naverInfo = GetParsedNaverInfo(relKeyword);
+                            foreach (var relate in naverInfo.RelatedKeyword) {
+                                this.mLiteManager.AddPendingKeyword(relate, 0);
+                            }
+                            this.mLiteManager.AddStatisticsKeyword(relKeyword, 
+                                monthlyPcQcCnt, 
+                                monthlyMobileQcCnt,
+                                compIdx, 
+                                naverInfo.TotalBlogNumber, 
+                                naverInfo.NonNaverBlogNumber, 
+                                naverInfo.NumberOfRelate);
 
                         }
                     }
@@ -133,21 +137,9 @@ namespace BlogMaster.M
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Stat = Status.Error;
                 }
-                /*
-                foreach (var elem in result)
-                {
-                    try
-                    {
-                        this.mLiteManager.AddPendingKeyword(elem, 0);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
 
-                }*/
             }
             catch (Exception e)
             {
@@ -178,7 +170,6 @@ namespace BlogMaster.M
                     this.mLiteManager.AddCollectedKeyword(this.Keyword, this.mStemFrom, 0);
                 }
                 catch (Exception e) {
-                    Console.WriteLine(e.Message);
                 }
                 
                 foreach (var elem in result) {
