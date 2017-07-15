@@ -21,6 +21,7 @@ namespace BlogMaster.M
             Finish = 3,
             Error= -1,
         }
+
         public Stopwatch mElapsed;
         public Status mStat;
         public String mKeyword;

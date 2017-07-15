@@ -17,7 +17,7 @@ namespace BlogMaster.M
         /// 참조 : https://www.janaks.com.np/using-sqlite-in-wpf-application/
         /// </summary>
         private static String TABLE_COLLECTED_KEYWORD = @"
-        CREATE TABLE `KEYWORDS` (
+        CREATE TABLE IF NOT EXISTS `KEYWORDS` (
 	        `no`	INTEGER PRIMARY KEY AUTOINCREMENT,
 	        `keyword`	TEXT UNIQUE,
 	        `DerivedCnt`	INTEGER,
@@ -25,15 +25,25 @@ namespace BlogMaster.M
         )
         ";
 
+        private static String TABLE_NAVER_API_KEYS = @"
+        CREATE TABLE IF NOT EXISTS `SecreteKeys` (
+	        `no`	INTEGER PRIMARY KEY AUTOINCREMENT,
+	        `CustomerID`	TEXT UNIQUE,
+	        `ACCESS`	TEXT,
+	        `Secret`	TEXT,
+            `active`    INTEGER
+        )
+        ";
+
         private static String TABLE_PENDING_KEYWORD = @"
-        CREATE TABLE `PENDING` (
+        CREATE TABLE IF NOT EXISTS `PENDING` (
 	        `no`	INTEGER PRIMARY KEY AUTOINCREMENT,
 	        `keyword`	TEXT UNIQUE,
             `Processed`	NUMERIC
         )
         ";
         private static String TABLE_COLLECTED_STATISTICS = @"
-        CREATE TABLE `STATISTICS` (
+        CREATE TABLE IF NOT EXISTS `STATISTICS` (
 	        `no`	INTEGER PRIMARY KEY AUTOINCREMENT,
 	        `keyword`	TEXT UNIQUE,
 	        `monthlyPcCnt`	INTEGER,
@@ -89,7 +99,22 @@ namespace BlogMaster.M
         private static String DELETE_PENDING = @"
         DELETE FROM PENDING WHERE keyword='{0} COLLATE NOCASE'
         ";
+        private static String DELETE_FULL_PENDING = @"
+        DELETE FROM PENDING WHERE Processed = 0
+        ";
 
+        private static String INIT_ALL_PENDING = @"
+        DELETE FROM PENDING 
+        ";
+        private static String INIT_ALL_KEYWORDS = @"
+        DELETE FROM KEYWORDS 
+        ";
+        private static String INIT_ALL_STATISTICS = @"
+        DELETE FROM STATISTICS
+        ";
+        private static String DELETE_FULL_KEYWORDS = @"
+        DELETE FROM KEYWORDS WHERE Processed = 0
+        ";
         private static String UPDATE_PENDING = @"
         UPDATE PENDING
             SET Processed=1
@@ -115,6 +140,7 @@ namespace BlogMaster.M
                     (new SQLiteCommand(SqlLiteManager.TABLE_COLLECTED_KEYWORD, this.m_dbConnection)).ExecuteNonQuery();
                     (new SQLiteCommand(SqlLiteManager.TABLE_COLLECTED_STATISTICS, this.m_dbConnection)).ExecuteNonQuery();
                     (new SQLiteCommand(SqlLiteManager.TABLE_PENDING_KEYWORD, this.m_dbConnection)).ExecuteNonQuery();
+                    (new SQLiteCommand(SqlLiteManager.TABLE_NAVER_API_KEYS, this.m_dbConnection)).ExecuteNonQuery();
 
                 }
                 catch (Exception e)
@@ -126,6 +152,11 @@ namespace BlogMaster.M
             else {
                 this.m_dbConnection = new SQLiteConnection(String.Format("Data Source={0};Version=3", sqlite));
                 this.m_dbConnection.Open();
+                (new SQLiteCommand(SqlLiteManager.TABLE_COLLECTED_KEYWORD, this.m_dbConnection)).ExecuteNonQuery();
+                (new SQLiteCommand(SqlLiteManager.TABLE_COLLECTED_STATISTICS, this.m_dbConnection)).ExecuteNonQuery();
+                (new SQLiteCommand(SqlLiteManager.TABLE_PENDING_KEYWORD, this.m_dbConnection)).ExecuteNonQuery();
+                (new SQLiteCommand(SqlLiteManager.TABLE_NAVER_API_KEYS, this.m_dbConnection)).ExecuteNonQuery();
+
             }
         }
 
@@ -139,7 +170,11 @@ namespace BlogMaster.M
         public string info() {
             return this.mSqliteName;
         }
-
+        public void DeleteUnPorcessedRecords()
+        {
+            DeleteSQL(SqlLiteManager.DELETE_FULL_KEYWORDS);
+            DeleteSQL(SqlLiteManager.DELETE_FULL_PENDING);
+        }
         public void AddCollectedKeyword(String keyword, int Count, int Processed) {
             String InsertQuery = String.Format(SqlLiteManager.INSERT_KEYWORD_QUERY, keyword, Count, Processed);
             try
@@ -183,6 +218,21 @@ namespace BlogMaster.M
                 
             }
             
+        }
+
+        public void DeleteAllTables()
+        {
+
+            try
+            {
+                DeleteSQL(SqlLiteManager.INIT_ALL_PENDING);
+                DeleteSQL(SqlLiteManager.INIT_ALL_KEYWORDS);
+                DeleteSQL(SqlLiteManager.INIT_ALL_STATISTICS);
+            }
+            catch
+            {
+
+            }
         }
 
         public void UpdateKeywordTable(IList<String> keywords) {
@@ -303,7 +353,33 @@ namespace BlogMaster.M
             }
             return selectDataTable;
         }
+        public void DeleteSQL(string Sql)
+        {
+            bool isbreaked = false;
+            try
+            {
+                _readerWriterLock.EnterWriteLock();
+                if (_readerWriterLock.WaitingReadCount > 0)
+                {
+                    isbreaked = true;
+                }
+                else
+                {
+                    //Function to insert data in your database
+                    (new SQLiteCommand(Sql, this.m_dbConnection)).ExecuteNonQuery();
+                }
+            }
+            finally
+            {
+                _readerWriterLock.ExitWriteLock();
+            }
 
+            if (isbreaked)
+            {
+                Thread.Sleep(10);
+                UpdateSQL(Sql);
+            }
+        }
         public void UpdateSQL(string Sql) {
             bool isbreaked = false;
             try

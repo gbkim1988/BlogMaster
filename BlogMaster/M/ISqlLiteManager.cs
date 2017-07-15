@@ -20,5 +20,7 @@ namespace BlogMaster.M
         void UpdateKeywordTable(IList<String> keywords);
         void UpdatePendingTable(IList<String> keywords);
         IList<String> RetrieveProcessedKewordList();
+        void DeleteUnPorcessedRecords();
+        void DeleteAllTables();
     }
 }

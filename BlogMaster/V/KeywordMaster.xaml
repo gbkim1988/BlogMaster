@@ -164,23 +164,23 @@
                     </Label>
                     <StackPanel>
                         <Label Content="검색 키워드 입력"></Label>
-                        <TextBox Name="FindKeyword"></TextBox>
+                        <TextBox Name="FindKeyword" Text="{Binding ControlFindKeyword, Mode=TwoWay}"></TextBox>
                     </StackPanel>
                     <StackPanel>
                         <Label Content="모바일 조회 수 (이상)"></Label>
-                        <TextBox Name="MobileCount"></TextBox>
+                        <TextBox Name="MobileCount" Text="{Binding ControlFindMobCnt, Mode=TwoWay}"></TextBox>
                     </StackPanel>
                     <StackPanel>
                         <Label Content="PC 조회 수 (이상)"></Label>
-                        <TextBox Name="PcCount"></TextBox>
+                        <TextBox Name="PcCount" Text="{Binding ControlFindPcCnt, Mode=TwoWay}"></TextBox>
                     </StackPanel>
                     <StackPanel>
                         <Label Content="블로그 갯수 (이상)"></Label>
-                        <TextBox Name="BlogTotal"></TextBox>
+                        <TextBox Name="BlogTotal" Text="{Binding ControlFindBlogTotal, Mode=TwoWay}"></TextBox>
                     </StackPanel>
                     <StackPanel>
                         <Label Content="N사 제외 블로그 갯수 (이상)"></Label>
-                        <TextBox Name="NonNaverBlogCount"></TextBox>
+                        <TextBox Name="NonNaverBlogCount" Text="{Binding ControlFindNonNavBlogCnt, Mode=TwoWay}"></TextBox>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
@@ -246,9 +246,10 @@
                             </Style>
                         </Label.Style>
                     </Label>
-                    <Button Content="검색" Margin="4"></Button>
+                    <Button Content="검색" Margin="4" Command="{Binding QueryTables}"></Button>
                     <Button Content="출력" Margin="4" Command="{Binding CreateCSV}"></Button>
-                    <Button Content="DB 초기화" Margin="4"></Button>
+                    <Button Content="DB 초기화" Margin="4" Command="{Binding DeleteAll}"></Button>
+                    <Button Content="작업 대기 초기화" Command="{Binding DeleteWorker}" Margin="4"></Button>
                 </StackPanel>
             </Grid>
             <GridSplitter Grid.Row="1" Height="4" HorizontalAlignment="Stretch"/>
@@ -271,7 +272,7 @@
                     </Label>
                 </StackPanel>
                 <!-- 키워드 수집 결과 -->
-                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding KeywordMasterRecordView}" Margin="3">
+                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding NaverStatisticsRecord}" Margin="3">
                     <DataGrid.Columns>
                     <!-- 키워드 Name -->
                         <DataGridTemplateColumn Header="키워드"  SortMemberPath="keyword"  CanUserSort="True">

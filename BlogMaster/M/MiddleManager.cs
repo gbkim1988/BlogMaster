@@ -87,6 +87,15 @@ namespace BlogMaster.M
             }
         }
 
+        public void InitAllTables()
+        {
+            this.mDb.DeleteAllTables();
+        }
+
+        public void DeleteWorkQueueFromDB()
+        {
+            this.mDb.DeleteUnPorcessedRecords();
+        }
         public void UpdateKeywordTable(object sender, ElapsedEventArgs e) {
             var PendingList = this.mDb.RetrievePendingList();
             if (PendingList.Count > 0) {

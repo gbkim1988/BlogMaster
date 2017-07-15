@@ -26,6 +26,9 @@ namespace BlogMaster.VM
         public ICommand KillSwitch { get; set; }
         public ICommand Restarter { get; set; }
         public ICommand CreateCSV { get; set; }
+        public ICommand DeleteWorker { get; set; }
+        public ICommand DeleteAll { get; set; }
+        public ICommand QueryTables { get; set; }
         public MiddleManager mManager;
         public static String NaverApiURL = "https://api.naver.com";
         public static String ACCESS = "0100000000afb7de6201403a6bb53a1339a839e695f73d852d763cc371f4ca6c48a3b7ee9a";
@@ -37,6 +40,15 @@ namespace BlogMaster.VM
         public Timer delayTimer;
         public Timer collectStatsTimer;
         public Timer StatsTimer;
+
+        public String ControlFindKeyword { get; set; }
+        public String ControlFindMobCnt { get; set; }
+        public String ControlFindPcCnt { get; set; }
+        public String ControlFindBlogTotal { get; set; }
+        public String ControlFindNonNavBlogCnt { get; set; }
+        
+        
+
         public int KeywordRecordCount {
             get { return mKeywordRecordCount; }
             set {
@@ -59,6 +71,11 @@ namespace BlogMaster.VM
             this.mDBConnection = manager;
             this.mManager = new MiddleManager(manager);
             NaverStats = new AsyncObservableCollection<NaverStatistics>();
+            ControlFindKeyword = "";
+            ControlFindMobCnt = "";
+            ControlFindPcCnt = "";
+            ControlFindBlogTotal = "";
+            ControlFindNonNavBlogCnt = "";
             //Task<int> nop = this.mManager.RollingStone(3000);
             timer = new Timer();
             timer.Interval = 3000;
@@ -75,17 +92,108 @@ namespace BlogMaster.VM
             collectStatsTimer.Elapsed += mManager.UpdateCollectTable;
             collectStatsTimer.Start();
 
+            /*
             StatsTimer = new Timer();
             collectStatsTimer.Interval = 10000;
             collectStatsTimer.Elapsed += GetCollectionView;
-            
+            */
             collectStatsTimer.Start();
 
             AddKeyword = new RelayCommand(AddKeywords);
             KillSwitch = new RelayCommand(KillTimer);
             Restarter = new RelayCommand(RestartTimer);
             CreateCSV = new RelayCommand(CreateCsvAPI);
+            DeleteWorker = new RelayCommand(DeleteWorkerPool);
+            DeleteAll = new RelayCommand(DeleteAllRecords);
+            QueryTables = new DelegateCommand(() => {
+                Task.Run(() => QueryStatisticsTable());
+            });
+        }
+        private async Task<int> QueryStatisticsTable()
+        {
+            int FindKeyword = -3;
+            int FindMobCnt = -3;
+            int FindPcCnt = -3;
+            int FindBlogTotal = -3;
+            int FindNonNavBlogCnt = -3;
+            /*
+                public String ControlFindKeyword { get; set; }
+                public String ControlFindMobCnt { get; set; }
+                public String ControlFindPcCnt { get; set; }
+                public String ControlFindBlogTotal { get; set; }
+                public String ControlFindNonNavBlogCnt { get; set; }
+            */
 
+
+            if (ControlFindMobCnt != "")
+            {
+                int.TryParse(ControlFindMobCnt, out FindMobCnt);
+            }
+            if (ControlFindPcCnt != "")
+            {
+                int.TryParse(ControlFindPcCnt, out FindPcCnt);
+            }
+            if (ControlFindBlogTotal != "")
+            {
+                int.TryParse(ControlFindBlogTotal, out FindBlogTotal);
+            }
+            if (ControlFindNonNavBlogCnt != "")
+            {
+                int.TryParse(ControlFindNonNavBlogCnt, out FindNonNavBlogCnt);
+            }
+            NaverStatisticsRecord.Clear();
+            IList<NaverStatistics> tmp = this.mDBConnection.RetrieveStatisticsList(); ;
+            if (ControlFindKeyword != "")
+            {
+                tmp = tmp.
+                    Where(x => x.monthlyMobCnt >= FindMobCnt).
+                    Where(x => x.monthlyPcCnt >= FindPcCnt).
+                    Where(x => x.blogCount >= FindBlogTotal).
+                    Where(x => x.noNaverBlogCount >= FindNonNavBlogCnt).
+                    Where(x => x.keyword.Contains(ControlFindKeyword)).
+                    ToList<NaverStatistics>();
+            }
+            else
+            {
+                tmp = tmp.
+                    Where(x => x.monthlyMobCnt >= FindMobCnt).
+                    Where(x => x.monthlyPcCnt >= FindPcCnt).
+                    Where(x => x.blogCount >= FindBlogTotal).
+                    Where(x => x.noNaverBlogCount >= FindNonNavBlogCnt).
+                    ToList<NaverStatistics>();
+            }
+            
+            foreach(var item in tmp)
+            {
+                NaverStatisticsRecord.Add(item);
+                KeywordRecordCount = NaverStatisticsRecord.Count;
+            }
+            //NaverStatisticsRecord = new AsyncObservableCollection<NaverStatistics>(tmp);
+            
+
+            return 0;
+        }
+        private void DeleteAllRecords()
+        {
+            MessageBoxResult Response =  MessageBox.Show("정말로 다 삭제하시겠습니까? 최범영님?", "WARNING", MessageBoxButton.YesNoCancel);
+            if (Response == MessageBoxResult.No || Response == MessageBoxResult.Cancel)
+            {
+                Messenger.Default.Send(new StatusBarMessage { Message = String.Format("DB 초기화 취소 수신 : DB 초기화를 취소하셨습니다. ") });
+            }
+            else {
+                KillTimer();
+                this.mManager.InitAllTables();
+                Messenger.Default.Send(new StatusBarMessage { Message = String.Format("DB 초기화 수신 : DB 초기화를 완료하였습니다. ") });
+                MessageBox.Show("DB 초기화 완료");
+            }
+
+        }
+        private void DeleteWorkerPool()
+        {
+            KillTimer(); // 현재 작업 대기열 모두 중단 상태 조정
+            this.mManager.DeleteWorkQueueFromDB();
+            Messenger.Default.Send(new StatusBarMessage { Message = String.Format("대기 작업열 초기화 요청 수신 : 모든 대기 작업열을 초기화 합니다. ") });
+            
         }
         private System.Threading.ReaderWriterLockSlim _readerWriterLock = new System.Threading.ReaderWriterLockSlim();
         private void CreateCsvAPI() {
@@ -123,7 +231,7 @@ namespace BlogMaster.VM
             get {return CollectionViewSource.GetDefaultView(NaverStats); }
         }
 
-        private void GetCollectionView(object sender, ElapsedEventArgs e)
+        private void GetCollectionView()
         {
 
             IList<NaverStatistics> tmp = this.mDBConnection.RetrieveStatisticsList();
@@ -160,8 +268,8 @@ namespace BlogMaster.VM
             timer.Stop();
             delayTimer.Stop();
             collectStatsTimer.Stop();
-            StatsTimer.Stop();
-            this.NaverStats.Clear();
+            //StatsTimer.Stop();
+            //this.NaverStats.Clear();
             this.mManager.mSlavePool.Clear();
             Messenger.Default.Send(new StatusBarMessage { Message = String.Format("작업 중지 요청 수신 : 모든 작업이 중단 예정입니다. ") });
         }
@@ -171,7 +279,7 @@ namespace BlogMaster.VM
             timer.Start();
             delayTimer.Start();
             collectStatsTimer.Start();
-            StatsTimer.Start();
+            //StatsTimer.Start();
             Messenger.Default.Send(new StatusBarMessage { Message = String.Format("작업 재개 요청 수신 : 작업을 시작 합니다. ") });
         }
     }
