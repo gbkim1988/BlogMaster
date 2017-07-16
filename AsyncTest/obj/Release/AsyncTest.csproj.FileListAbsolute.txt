@@ -6,3 +6,11 @@ C:\Users\YES24\documents\visual studio 2015\Projects\BlogMaster\AsyncTest\obj\Re
 C:\Users\YES24\documents\visual studio 2015\Projects\BlogMaster\AsyncTest\obj\Release\AsyncTest.pdb
 C:\Users\YES24\documents\visual studio 2015\Projects\BlogMaster\AsyncTest\bin\Release\Newtonsoft.Json.dll
 C:\Users\YES24\documents\visual studio 2015\Projects\BlogMaster\AsyncTest\bin\Release\Newtonsoft.Json.xml
+C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\AsyncTest\bin\Release\AsyncTest.exe.config
+C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\AsyncTest\bin\Release\AsyncTest.exe
+C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\AsyncTest\bin\Release\AsyncTest.pdb
+C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\AsyncTest\bin\Release\Newtonsoft.Json.dll
+C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\AsyncTest\bin\Release\Newtonsoft.Json.xml
+C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\AsyncTest\obj\Release\AsyncTest.csprojResolveAssemblyReference.cache
+C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\AsyncTest\obj\Release\AsyncTest.exe
+C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\AsyncTest\obj\Release\AsyncTest.pdb

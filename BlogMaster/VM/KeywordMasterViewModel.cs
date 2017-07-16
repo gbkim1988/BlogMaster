@@ -31,9 +31,9 @@ namespace BlogMaster.VM
         public ICommand QueryTables { get; set; }
         public MiddleManager mManager;
         public static String NaverApiURL = "https://api.naver.com";
-        public static String ACCESS = "0100000000afb7de6201403a6bb53a1339a839e695f73d852d763cc371f4ca6c48a3b7ee9a";
-        public static String Secret = "AQAAAAAl3cX78O8vHpex4GEsNOW9R0D5M23d+OUrsBCRDryoRQ==";
-        public static String CsID = "1208129";
+        public static String ACCESS = "010000000072b86885ad17db12fa363fdae020da53551f6b67e3e90ce2ce7f13c316c3dff0";
+        public static String Secret = "AQAAAAByuGiFrRfbEvo2P9rgINpTCIkxi8H80T8N412ypolxAw==";
+        public static String CsID = "984499";
         public ISqlLiteManager mDBConnection;
         public int mKeywordRecordCount;
         public Timer timer;

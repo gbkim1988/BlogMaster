@@ -82,7 +82,6 @@ C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\BlogMaster\bin\R
 C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\BlogMaster\bin\Release\RestSharp.xml
 C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\BlogMaster\bin\Release\System.Data.SQLite.xml
 C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\BlogMaster\bin\Release\System.Data.SQLite.dll.config
-C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\BlogMaster\obj\Release\BYMaster.csprojResolveAssemblyReference.cache
 C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\BlogMaster\obj\Release\MainWindow.g.cs
 C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\BlogMaster\obj\Release\V\CollectMaster.g.cs
 C:\Users\gbkim\Documents\Visual Studio 2017\Projects\BlogMaster\BlogMaster\obj\Release\V\KeywordMaster.g.cs
